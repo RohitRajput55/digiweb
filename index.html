@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Transparent Navbar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Flip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        .nav-transparent {
+            background: #fff;
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 nav-transparent">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <a href="#" class="text-2xl font-bold">
+                    <span class="text-yellow-300">DIGI</span>
+                    <span class="text-orange-400">STAR</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="text-gray-600 hover:text-orange-300 transition-colors font-medium">Home</a>
+                    <a href="#" class="text-gray-600 hover:text-orange-300 transition-colors font-medium">Services</a>
+                    <a href="#" class="text-gray-600 hover:text-orange-300 transition-colors font-medium">Work</a>
+                    <a href="#" class="text-gray-600 hover:text-orange-300 transition-colors font-medium">About</a>
+                    
+                </div>
+                <button class="hidden md:block bg-orange-400 text-black text-yellow-200 px-6 py-2 rounded-full font-semibold hover:bg-orange-300 transition-colors">Contact</button>
+                    
+             
+                <!-- Mobile Menu Button -->
+                <button id="menu-btn" class="md:hidden p-2 rounded-lg hover:bg-black/20 transition-colors">
+                    <svg class="w-8 h-8 text-yellow-300" viewBox="0 0 24 24">
+                        <path id="menu-icon" fill="currentColor" d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="absolute w-full nav-transparent backdrop-blur-lg" style="display: none;">
+            <div class="px-4 py-6 space-y-6">
+                <a href="#" class="block text-yellow-300 text-xl hover:text-orange-400">Home</a>
+                <a href="#" class="block text-yellow-300 text-xl hover:text-orange-400">Services</a>
+                <a href="#" class="block text-yellow-300 text-xl hover:text-orange-400">Work</a>
+                <a href="#" class="block text-yellow-300 text-xl hover:text-orange-400">About</a>
+                <button class="w-full bg-orange-400 text-yellow-200 text-black px-6 py-3 rounded-full font-semibold hover:bg-orange-300 transition-colors">
+                    Contact
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <script>
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+        let menuOpen = false;
+
+        // GSAP Animations
+        const menuTL = gsap.timeline({paused: true})
+            .to(mobileMenu, {
+                height: 'auto',
+                opacity: 1,
+                duration: 0.3,
+                ease: 'power2.inOut'
+            })
+            .from('#mobile-menu a, #mobile-menu button', {
+                y: 20,
+                opacity: 0,
+                duration: 0.3,
+                stagger: 0.1,
+                ease: 'power2.out'
+            }, 0.2);
+
+        // SVG Morph Animation
+        const burgerPath = "M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z";
+        const closePath = "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z";
+
+        function toggleMenu() {
+            menuOpen = !menuOpen;
+            
+            if(menuOpen) {
+                mobileMenu.style.display = 'block';
+                menuTL.play();
+                gsap.to(menuIcon, {
+                    duration: 0.3,
+                    attr: { d: closePath },
+                    ease: 'power2.inOut'
+                });
+            } else {
+                menuTL.reverse().then(() => {
+                    mobileMenu.style.display = 'none';
+                });
+                gsap.to(menuIcon, {
+                    duration: 0.3,
+                    attr: { d: burgerPath },
+                    ease: 'power2.inOut'
+                });
+            }
+        }
+
+        // Event Listeners
+        menuBtn.addEventListener('click', toggleMenu);
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if(!menuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+                if(menuOpen) toggleMenu();
+            }
+        });
+
+        // Close menu on link click
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', toggleMenu);
+        });
+    </script>
+
+<!-- hero section -->
+    
+
+    <style>
+        .hero-section {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .banner {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transform: scale(1.1);
+            z-index: 1;
+            transition: transform 8s ease-out;
+        }
+        
+        .content-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            max-width: 1200px;
+            padding: 0 20px;
+            z-index: 2;
+            text-align: center;
+        }
+        
+        .content-item {
+            position: absolute;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(50px);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .gradient-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%);
+            z-index: 1;
+        }
+        
+        .text-mask {
+            overflow: hidden;
+            display: inline-block;
+        }
+        
+        .text-line {
+            display: inline-block;
+            transform: translateY(100%);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <!-- Banners -->
+        <div class="banner active" style="background-image: url('https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')"></div>
+        <div class="banner" style="background-image: url('https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2072&q=80')"></div>
+        <div class="banner" style="background-image: url('https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')"></div>
+        
+        <div class="gradient-overlay"></div>
+        
+        <!-- Marketing Content - Perfectly Centered -->
+        <div class="content-container">
+            <div class="content-item active">
+                <div class="text-mask">
+                    <h1 class="text-line text-4xl md:text-6xl font-bold text-white mb-6">
+                        <span class="text-amber-400">Data-Driven</span> Marketing Solutions
+                    </h1>
+                </div>
+                <div class="text-mask">
+                    <p class="text-line text-xl md:text-2xl text-amber-100 mb-8">
+                        Maximize ROI with our AI-powered analytics platform
+                    </p>
+                </div>
+            </div>
+            
+            <div class="content-item">
+                <div class="text-mask">
+                    <h1 class="text-line text-4xl md:text-6xl font-bold text-white mb-6">
+                        <span class="text-amber-400">Conversion</span> Optimization
+                    </h1>
+                </div>
+                <div class="text-mask">
+                    <p class="text-line text-xl md:text-2xl text-amber-100 mb-8">
+                        Turn visitors into loyal customers with smart UX
+                    </p>
+                </div>
+            </div>
+            
+            <div class="content-item">
+                <div class="text-mask">
+                    <h1 class="text-line text-4xl md:text-6xl font-bold text-white mb-6">
+                        <span class="text-amber-400">Conversion</span> Optimization
+                    </h1>
+                </div>
+                <div class="text-mask">
+                    <p class="text-line text-xl md:text-2xl text-amber-100 mb-8">
+                        Turn visitors into loyal customers with smart UX
+                    </p>
+                </div>
+            </div>
+            
+            
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Elements
+            const banners = gsap.utils.toArray('.banner');
+            const contentItems = gsap.utils.toArray('.content-item');
+            const textLines = gsap.utils.toArray('.text-line');
+            const ctaBtn = document.querySelector('.cta-btn');
+            let currentIndex = 0;
+
+            // Initial setup
+            gsap.set('.banner.active', { opacity: 1, scale: 1 });
+            gsap.set('.content-item.active', { opacity: 1 });
+            gsap.set(textLines, { y: 0 });
+            gsap.set(ctaBtn, { opacity: 1 });
+
+            // Text animation function
+            function animateTextIn(item) {
+                const lines = item.querySelectorAll('.text-line');
+                gsap.fromTo(lines,
+                    { y: 100, opacity: 0 },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        duration: 1.2,
+                        stagger: 0.15,
+                        ease: "expo.out"
+                    }
+                );
+            }
+
+            // Change content function
+            function changeContent() {
+                const nextIndex = (currentIndex + 1) % banners.length;
+                const currentBanner = banners[currentIndex];
+                const nextBanner = banners[nextIndex];
+                const currentContent = contentItems[currentIndex];
+                const nextContent = contentItems[nextIndex];
+
+                // Animate out current elements
+                gsap.to([currentBanner, currentContent], {
+                    opacity: 0,
+                    duration: 1,
+                    ease: "power2.inOut",
+                    onComplete: () => {
+                        currentBanner.classList.remove('active');
+                        currentContent.classList.remove('active');
+                    }
+                });
+
+                // Animate in next elements
+                nextBanner.classList.add('active');
+                nextContent.classList.add('active');
+                
+                gsap.fromTo([nextBanner, nextContent],
+                    { opacity: 0 },
+                    {
+                        opacity: 1,
+                        duration: 1.5,
+                        ease: "power2.out",
+                        onStart: () => animateTextIn(nextContent)
+                    }
+                );
+
+                // Scale effect for background
+                gsap.fromTo(nextBanner,
+                    { scale: 1.1 },
+                    {
+                        scale: 1,
+                        duration: 8,
+                        ease: "power1.out"
+                    }
+                );
+
+                currentIndex = nextIndex;
+            }
+
+            // Initial animations
+            animateTextIn(document.querySelector('.content-item.active'));
+            gsap.from(ctaBtn, {
+                y: 30,
+                opacity: 0,
+                duration: 1.5,
+                ease: "elastic.out(1, 0.5)",
+                delay: 0.8
+            });
+
+            // Start rotation (every 5 seconds)
+            let rotationInterval = setInterval(changeContent, 5000);
+
+            // Pause on hover
+            document.querySelector('.hero-section').addEventListener('mouseenter', () => {
+                clearInterval(rotationInterval);
+            });
+
+            document.querySelector('.hero-section').addEventListener('mouseleave', () => {
+                rotationInterval = setInterval(changeContent, 5000);
+            });
+
+            // CTA hover effect
+            ctaBtn.addEventListener('mouseenter', () => {
+                gsap.to(ctaBtn, {
+                    scale: 1.05,
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+            });
+
+            ctaBtn.addEventListener('mouseleave', () => {
+                gsap.to(ctaBtn, {
+                    scale: 1,
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
+            });
+        });
+    </script>
+
+
+   <!-- About Section -->
+
+    <style>
+        .about-section {
+            background: linear-gradient(45deg, #f8fafc, #f1f5f9);
+        }
+        
+        .mission-card {
+            perspective: 1000px;
+            height: 300px;
+        }
+        
+        .mission-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .mission-card:hover .mission-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .mission-front, .mission-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        
+        .mission-back {
+            transform: rotateY(180deg);
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-number {
+            background: linear-gradient(45deg, #f59e0b, #fcd34d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .team-card {
+            transition: all 0.3s ease;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(245, 158, 11, 0.1);
+        }
+    </style>
+
+    <!-- About Us Section -->
+    <section class="about-section relative overflow-hidden py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <!-- Section Header -->
+            <div class="text-center mb-20 opacity-0" id="aboutHeader">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                    Pioneering Digital Excellence
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Transforming brands through innovative digital strategies since 2015
+                </p>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <!-- Left Column - Mission Flip Card -->
+                <div class="mission-card opacity-0" id="missionCard">
+                    <div class="mission-inner">
+                        <div class="mission-front">
+                            <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                                 alt="Our Mission" 
+                                 class="w-full h-full object-cover">
+                        </div>
+                        <div class="mission-back">
+                            <h3 class="text-3xl font-bold text-gray-900 mb-4">
+                                Our Mission
+                            </h3>
+                            <p class="text-gray-600">
+                                To empower businesses with data-driven marketing solutions that drive real results. 
+                                We combine creativity with cutting-edge technology to deliver measurable growth.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Stats -->
+                <div class="space-y-8 opacity-0" id="aboutStats">
+                    <div class="bg-white p-8 rounded-xl shadow-lg">
+                        <h3 class="text-3xl font-bold text-gray-900 mb-4">
+                            Why Choose Us?
+                        </h3>
+                        <p class="text-gray-600">
+                            With a team of 50+ digital experts, we've helped hundreds of businesses achieve their marketing goals through tailored strategies and measurable results.
+                        </p>
+                    </div>
+                    
+                    <!-- Stats Grid -->
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                            <div class="text-4xl font-bold stat-number" id="stat1">0</div>
+                            <div class="text-gray-600 mt-2">Successful Campaigns</div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                            <div class="text-4xl font-bold stat-number" id="stat2">0</div>
+                            <div class="text-gray-600 mt-2">Satisfied Clients</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Members -->
+            <!-- <div class="grid md:grid-cols-3 gap-8 mt-20">
+                <div class="team-card opacity-0 bg-white p-6 rounded-xl shadow-md">
+                    <div class="w-full h-48 mb-4 rounded-lg overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+                             alt="Sarah Johnson" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-900">Sarah Johnson</h4>
+                    <p class="text-amber-600">CEO & Founder</p>
+                    <p class="text-gray-500 text-sm mt-2">10+ years in digital marketing</p>
+                </div>
+                
+                <div class="team-card opacity-0 bg-white p-6 rounded-xl shadow-md">
+                    <div class="w-full h-48 mb-4 rounded-lg overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+                             alt="Michael Chen" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-900">Michael Chen</h4>
+                    <p class="text-amber-600">Creative Director</p>
+                    <p class="text-gray-500 text-sm mt-2">Branding & design expert</p>
+                </div>
+                
+                <div class="team-card opacity-0 bg-white p-6 rounded-xl shadow-md">
+                    <div class="w-full h-48 mb-4 rounded-lg overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+                             alt="Jessica Williams" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="text-xl font-bold text-gray-900">Jessica Williams</h4>
+                    <p class="text-amber-600">SEO Strategist</p>
+                    <p class="text-gray-500 text-sm mt-2">Organic growth specialist</p>
+                </div> -->
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Register ScrollTrigger plugin
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Section header animation
+            gsap.to("#aboutHeader", {
+                opacity: 1,
+                y: 0,
+                scrollTrigger: {
+                    trigger: "#aboutHeader",
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                },
+                duration: 1,
+                ease: "power4.out"
+            });
+
+            // Mission card animation
+            gsap.to("#missionCard", {
+                opacity: 1,
+                y: 0,
+                scrollTrigger: {
+                    trigger: "#missionCard",
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                },
+                duration: 1,
+                ease: "power4.out"
+            });
+
+            // Stats animation
+            gsap.to("#aboutStats", {
+                opacity: 1,
+                y: 0,
+                scrollTrigger: {
+                    trigger: "#aboutStats",
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                },
+                duration: 1,
+                ease: "power4.out"
+            });
+
+            // Stats counter animation
+            gsap.to("#stat1", {
+                innerText: 1500,
+                duration: 2,
+                scrollTrigger: {
+                    trigger: "#stat1",
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                },
+                snap: { innerText: 1 },
+                ease: "power4.out"
+            });
+
+            gsap.to("#stat2", {
+                innerText: 450,
+                duration: 2,
+                scrollTrigger: {
+                    trigger: "#stat2",
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                },
+                snap: { innerText: 1 },
+                ease: "power4.out"
+            });
+
+            // Team member animations
+            gsap.utils.toArray(".team-card").forEach((card, i) => {
+                gsap.to(card, {
+                    opacity: 1,
+                    y: 0,
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top 90%",
+                        toggleActions: "play none none reverse"
+                    },
+                    duration: 0.8,
+                    delay: i * 0.2,
+                    ease: "power4.out"
+                });
+            });
+        });
+    </script>
+
+     <!-- services part  -->
+
+
+     <style>
+        .service-card {
+            perspective: 1000px;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,0.9) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(245, 158, 11, 0.1);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(245, 158, 11, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-color: rgba(245, 158, 11, 0.2);
+        }
+        
+        .service-icon-wrapper {
+            width: 80px;
+            height: 80px;
+            background: rgba(245, 158, 11, 0.1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .service-icon path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            transition: all 0.5s ease;
+        }
+        
+        .service-card:hover .service-icon path {
+            stroke-dashoffset: 0;
+        }
+        
+        .feature-badge {
+            background: rgba(245, 158, 11, 0.1);
+            color: #F59E0B;
+            transition: all 0.3s ease;
+        }
+        
+        .service-card:hover .feature-badge {
+            background: rgba(245, 158, 11, 0.2);
+            transform: translateX(5px);
+        }
+    </style>
+</head>
+
+    <!-- Services Section -->
+    <section class="py-24 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <!-- Section Header -->
+            <div class="text-center mb-20 opacity-0" id="servicesHeader">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                    Our Digital Marketing Services
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Comprehensive solutions to grow your online presence and maximize ROI
+                </p>
+            </div>
+
+            <!-- Services Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- SEO Service -->
+                <div class="service-card p-8 rounded-2xl shadow-sm opacity-0" id="service1">
+                    <div class="service-icon-wrapper mb-6">
+                        <svg class="service-icon w-12 h-12" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M32 58C46.3594 58 58 46.3594 58 32C58 17.6406 46.3594 6 32 6C17.6406 6 6 17.6406 6 32C6 46.3594 17.6406 58 32 58Z" 
+                                  stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M32 44L44 32L32 20" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M20 32H44" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Search Engine Optimization</h3>
+                    <p class="text-gray-600 mb-6">
+                        Dominate search rankings with our comprehensive SEO strategies that drive organic traffic and leads.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Keyword Research & Strategy</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">On-Page & Technical SEO</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Content Optimization</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Local SEO & Citations</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">SEO Analytics & Reporting</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Social Media Marketing -->
+                <div class="service-card p-8 rounded-2xl shadow-sm opacity-0" id="service2">
+                    <div class="service-icon-wrapper mb-6">
+                        <svg class="service-icon w-12 h-12" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M48 16H16C12.6863 16 10 18.6863 10 22V42C10 45.3137 12.6863 48 16 48H48C51.3137 48 54 45.3137 54 42V22C54 18.6863 51.3137 16 48 16Z" 
+                                  stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M22 40L30 28L38 40L46 26" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M18 32H26" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Social Media Marketing</h3>
+                    <p class="text-gray-600 mb-6">
+                        Build brand awareness and engagement through strategic social media campaigns.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Platform-Specific Strategies</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Content Calendar Development</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Paid Social Advertising</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Influencer Collaborations</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Performance Analytics</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Social Media Optimization -->
+                <div class="service-card p-8 rounded-2xl shadow-sm opacity-0" id="service3">
+                    <div class="service-icon-wrapper mb-6">
+                        <svg class="service-icon w-12 h-12" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Main circle background -->
+                            <path d="M32 58C46.3594 58 58 46.3594 58 32C58 17.6406 46.3594 6 32 6C17.6406 6 6 17.6406 6 32C6 46.3594 17.6406 58 32 58Z" 
+                                  stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            
+                            <!-- Network connection lines -->
+                            <path d="M22 22L16 16" stroke="#4B5563" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M42 22L48 16" stroke="#4B5563" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M22 42L16 48" stroke="#4B5563" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M42 42L48 48" stroke="#4B5563" stroke-width="2" stroke-linecap="round"/>
+                            
+                            <!-- Central share/social icon -->
+                            <path d="M32 36V28M28 32H36" stroke="#F59E0B" stroke-width="2" stroke-linecap="round"/>
+                            
+                            <!-- Social media platform indicators -->
+                            <circle cx="20" cy="20" r="3" fill="#4B5563"/>
+                            <circle cx="44" cy="20" r="3" fill="#4B5563"/>
+                            <circle cx="20" cy="44" r="3" fill="#4B5563"/>
+                            <circle cx="44" cy="44" r="3" fill="#4B5563"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Social Media Optimization</h3>
+                    <p class="text-gray-600 mb-6">
+                        Optimize your social profiles to maximize visibility and engagement.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Profile Optimization</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Content Strategy Development</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Hashtag Research</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Engagement Strategies</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Brand Voice Development</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- PPC Advertising -->
+                <div class="service-card p-8 rounded-2xl shadow-sm opacity-0" id="service4">
+                    <div class="service-icon-wrapper mb-6">
+                        <svg class="service-icon w-12 h-12" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 22L32 10L54 22V42L32 54L10 42V22Z" 
+                                  stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M32 34C33.1046 34 34 33.1046 34 32C34 30.8954 33.1046 30 32 30C30.8954 30 30 30.8954 30 32C30 33.1046 30.8954 34 32 34Z" 
+                                  stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M22 32H42" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">PPC Advertising</h3>
+                    <p class="text-gray-600 mb-6">
+                        Drive immediate traffic and conversions with targeted pay-per-click campaigns.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Google Ads Management</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Facebook/Instagram Ads</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Remarketing Campaigns</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Conversion Rate Optimization</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">ROI Tracking & Reporting</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Content Marketing -->
+                <div class="service-card p-8 rounded-2xl shadow-sm opacity-0" id="service5">
+                    <div class="service-icon-wrapper mb-6">
+                        <svg class="service-icon w-12 h-12" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M54 18H10V46H54V18Z" 
+                                  stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M18 18V10H46V18" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M22 30H42" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M22 38H34" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Content Marketing</h3>
+                    <p class="text-gray-600 mb-6">
+                        Attract and engage your audience with valuable, relevant content.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Content Strategy Development</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Blog & Article Writing</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Video Content Production</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Infographic Creation</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Content Distribution</span>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Add more services following the same pattern -->
+                  <!-- Email Marketing -->
+                <div class="service-card p-8 rounded-2xl shadow-sm opacity-0" id="service6">
+                    <div class="service-icon-wrapper mb-6">
+                        <svg class="service-icon w-12 h-12" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M54 18H10V46H54V18Z" 
+                                  stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M10 18L32 34L54 18" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M22 38L10 46" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M42 38L54 46" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Email Marketing</h3>
+                    <p class="text-gray-600 mb-6">
+                        Nurture leads and build customer loyalty through targeted email campaigns.
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Email Campaign Strategy</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">List Segmentation</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Automated Workflows</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">A/B Testing</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="feature-badge px-3 py-1 rounded-full text-sm font-medium mr-3">✓</span>
+                            <span class="text-gray-700">Performance Analytics</span>
+                        </li>
+                    </ul>
+                </div>
+                 
+                
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Section header animation
+            gsap.to("#servicesHeader", {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: "power4.out",
+                scrollTrigger: {
+                    trigger: "#servicesHeader",
+                    start: "top 80%"
+                }
+            });
+
+            // Service cards animation
+            gsap.utils.toArray(".service-card").forEach((card, i) => {
+                gsap.to(card, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    delay: i * 0.2,
+                    ease: "power4.out",
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top 90%"
+                    }
+                });
+
+                // Icon draw animation
+                const paths = card.querySelectorAll('.service-icon path');
+                paths.forEach(path => {
+                    const length = path.getTotalLength();
+                    gsap.fromTo(path,
+                        {
+                            strokeDashoffset: length,
+                            strokeDasharray: length
+                        },
+                        {
+                            strokeDashoffset: 0,
+                            duration: 2,
+                            ease: "power4.out",
+                            scrollTrigger: {
+                                trigger: card,
+                                start: "top 90%"
+                            }
+                        }
+                    );
+                });
+            });
+
+            // Hover effects
+            document.querySelectorAll('.service-card').forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    gsap.to(card, {
+                        y: -10,
+                        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.1)',
+                        duration: 0.3
+                    });
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, {
+                        y: 0,
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                        duration: 0.3
+                    });
+                });
+            });
+        });
+    </script>
+
+    <!-- teaching section -->
+    
+   
+        <style>
+            .course-card {
+                background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.95) 100%);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(245, 158, 11, 0.15);
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            }
+            
+            .course-card:hover {
+                transform: translateY(-8px) scale(1.02);
+                box-shadow: 0 25px 50px -12px rgba(245, 158, 11, 0.15);
+                border-color: rgba(245, 158, 11, 0.3);
+            }
+            
+            .feature-icon {
+                width: 60px;
+                height: 60px;
+                background: rgba(245, 158, 11, 0.1);
+                border-radius: 18px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .feature-icon svg path {
+                stroke-dasharray: 1000;
+                stroke-dashoffset: 1000;
+                transition: all 0.8s ease;
+            }
+            
+            .course-card:hover .feature-icon svg path {
+                stroke-dashoffset: 0;
+            }
+            
+            .highlight-badge {
+                background: rgba(245, 158, 11, 0.1);
+                color: #F59E0B;
+                transition: all 0.3s ease;
+            }
+            
+            .course-card:hover .highlight-badge {
+                background: rgba(245, 158, 11, 0.2);
+                transform: translateX(4px);
+            }
+            
+            .stat-number {
+                font-size: 2.5rem;
+                background: linear-gradient(45deg, #f59e0b, #fcd34d);
+                -webkit-background-clip: text;
+                background-clip: text;
+                color: transparent;
+            }
+        </style>
+    
+        <!-- Digital Marketing Course Section -->
+        <section class="py-24 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto">
+                <!-- Section Header -->
+                <div class="text-center mb-20 opacity-0" id="courseHeader">
+                    <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                        Professional <span class = "text-[#f59e0b]">Certification</span> in <span class = "text-[#f59e0b]">Digital Marketing</span>
+                    </h2>
+                    <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                        Master 200+ tools, AI applications, and industry strategies with our comprehensive program
+                    </p>
+                </div>
+    
+                <!-- Course Highlights Grid -->
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+                    <!-- 200+ Tools -->
+                    <div class="course-card p-6 rounded-xl shadow-sm opacity-0" id="highlight1">
+                        <div class="feature-icon mb-4">
+                            <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M54 18H10V46H54V18Z" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M18 18V10H46V18" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 30H42" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 38H34" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M38 38H42" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="stat-number font-bold mb-2" id="toolsCount">0</div>
+                        <h3 class="text-xl font-semibold text-gray-800">Industry Tools</h3>
+                        <p class="text-gray-600 text-sm">Google Analytics, SEMrush, HubSpot, and more</p>
+                    </div>
+    
+                    <!-- AI Integration -->
+                    <div class="course-card p-6 rounded-xl shadow-sm opacity-0" id="highlight2">
+                        <div class="feature-icon mb-4">
+                            <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M42 22L54 10" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 22L10 10" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M32 44V58" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M42 34L48 40" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 34L16 40" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M32 18V6" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M38 26L32 18L26 26" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">AI Integration</h3>
+                        <p class="text-gray-600 text-sm">ChatGPT, Midjourney, and AI automation tools</p>
+                    </div>
+    
+                    <!-- 150+ Hours -->
+                    <div class="course-card p-6 rounded-xl shadow-sm opacity-0" id="highlight3">
+                        <div class="feature-icon mb-4">
+                            <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M32 58C46.3594 58 58 46.3594 58 32C58 17.6406 46.3594 6 32 6C17.6406 6 6 17.6406 6 32C6 46.3594 17.6406 58 32 58Z" 
+                                      stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M32 16V32L42 38" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="stat-number font-bold mb-2" id="hoursCount">0</div>
+                        <h3 class="text-xl font-semibold text-gray-800">Hands-on Training</h3>
+                        <p class="text-gray-600 text-sm">Practical assignments and real-world projects</p>
+                    </div>
+    
+                    <!-- Specialization -->
+                    <div class="course-card p-6 rounded-xl shadow-sm opacity-0" id="highlight4">
+                        <div class="feature-icon mb-4">
+                            <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M32 44L44 32L32 20" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M20 32H44" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 26L26 22" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M38 26L42 22" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 38L26 42" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M38 38L42 42" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Super Specialization</h3>
+                        <p class="text-gray-600 text-sm">Choose your focus area: SEO, PPC, or Social Media</p>
+                    </div>
+                </div>
+    
+                <!-- Detailed Curriculum -->
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Left Column -->
+                    <div class="course-card p-8 rounded-xl shadow-sm opacity-0" id="curriculum1">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                            <span class="feature-icon mr-4">
+                                <svg width="24" height="24" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M10 22L32 10L54 22V42L32 54L10 42V22Z" 
+                                          stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M22 22L32 16L42 22" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M22 42V22L10 22" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M42 42V22L54 22" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M22 42L32 48L42 42" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M32 48V16" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                            Core Modules
+                        </h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <span class="highlight-badge px-2 py-1 rounded-full text-xs font-medium mr-3 mt-1">✓</span>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Digital Marketing Fundamentals</h4>
+                                    <p class="text-gray-600 text-sm">Funnel strategies, customer journey mapping, and digital ecosystems</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="highlight-badge px-2 py-1 rounded-full text-xs font-medium mr-3 mt-1">✓</span>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Search Engine Optimization</h4>
+                                    <p class="text-gray-600 text-sm">Technical SEO, on-page optimization, and link building strategies</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="highlight-badge px-2 py-1 rounded-full text-xs font-medium mr-3 mt-1">✓</span>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Social Media Marketing</h4>
+                                    <p class="text-gray-600 text-sm">Platform algorithms, content strategies, and community management</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+    
+                    <!-- Right Column -->
+                    <div class="course-card p-8 rounded-xl shadow-sm opacity-0" id="curriculum2">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                            <span class="feature-icon mr-4">
+                                <svg width="24" height="24" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M32 58C46.3594 58 58 46.3594 58 32C58 17.6406 46.3594 6 32 6C17.6406 6 6 17.6406 6 32C6 46.3594 17.6406 58 32 58Z" 
+                                          stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M32 44L44 32L32 20" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M20 32H44" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M22 26L26 22" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M38 26L42 22" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M22 38L26 42" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M38 38L42 42" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                            Advanced Specializations
+                        </h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <span class="highlight-badge px-2 py-1 rounded-full text-xs font-medium mr-3 mt-1">✓</span>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">AI in Digital Marketing</h4>
+                                    <p class="text-gray-600 text-sm">Automated campaigns, predictive analytics, and AI content tools</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="highlight-badge px-2 py-1 rounded-full text-xs font-medium mr-3 mt-1">✓</span>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Conversion Rate Optimization</h4>
+                                    <p class="text-gray-600 text-sm">A/B testing, heatmaps, and psychological triggers</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="highlight-badge px-2 py-1 rounded-full text-xs font-medium mr-3 mt-1">✓</span>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Industry Case Studies</h4>
+                                    <p class="text-gray-600 text-sm">Real-world campaigns from Fortune 500 companies</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+    
+                <!-- Certification Badge -->
+                <div class="course-card mt-12 p-8 rounded-xl shadow-sm opacity-0" id="certification">
+                    <div class="flex flex-col md:flex-row items-center">
+                        <div class="feature-icon w-24 h-24 mb-6 md:mb-0 md:mr-8">
+                            <svg width="48" height="48" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M32 48L24 52L26 43L20 36L29 34L32 26L35 34L44 36L38 43L40 52L32 48Z" 
+                                      stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M32 58C46.3594 58 58 46.3594 58 32C58 17.6406 46.3594 6 32 6C17.6406 6 6 17.6406 6 32C6 46.3594 17.6406 58 32 58Z" 
+                                      stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-4">Industry-Recognized Certification</h3>
+                            <p class="text-gray-600 mb-6">
+                                Earn our Professional Certification upon completion, with portfolio-ready projects and verifiable credentials.
+                            </p>
+                            <button class="bg-gradient-to-r from-amber-500 to-amber-600 text-white px-8 py-3 rounded-full font-bold hover:shadow-lg transition-all">
+                                Download Course Syllabus
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                gsap.registerPlugin(ScrollTrigger);
+    
+                // Header animation
+                gsap.to("#courseHeader", {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    ease: "power4.out",
+                    scrollTrigger: {
+                        trigger: "#courseHeader",
+                        start: "top 80%"
+                    }
+                });
+    
+                // Highlights animation
+                gsap.utils.toArray("#highlight1, #highlight2, #highlight3, #highlight4").forEach((card, i) => {
+                    gsap.to(card, {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.8,
+                        delay: i * 0.2,
+                        ease: "power4.out",
+                        scrollTrigger: {
+                            trigger: card,
+                            start: "top 85%"
+                        }
+                    });
+                });
+    
+                // Curriculum animation
+                gsap.to("#curriculum1", {
+                    opacity: 1,
+                    x: 0,
+                    duration: 1,
+                    ease: "power4.out",
+                    scrollTrigger: {
+                        trigger: "#curriculum1",
+                        start: "top 80%"
+                    }
+                });
+    
+                gsap.to("#curriculum2", {
+                    opacity: 1,
+                    x: 0,
+                    duration: 1,
+                    ease: "power4.out",
+                    scrollTrigger: {
+                        trigger: "#curriculum2",
+                        start: "top 80%"
+                    }
+                });
+    
+                // Certification animation
+                gsap.to("#certification", {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    ease: "power4.out",
+                    scrollTrigger: {
+                        trigger: "#certification",
+                        start: "top 80%"
+                    }
+                });
+    
+                // Number counting animations
+                gsap.to("#toolsCount", {
+                    innerText: 200,
+                    duration: 2,
+                    snap: { innerText: 1 },
+                    ease: "power4.out",
+                    scrollTrigger: {
+                        trigger: "#highlight1",
+                        start: "top 85%"
+                    }
+                });
+    
+                gsap.to("#hoursCount", {
+                    innerText: 150,
+                    duration: 2,
+                    snap: { innerText: 1 },
+                    ease: "power4.out",
+                    scrollTrigger: {
+                        trigger: "#highlight3",
+                        start: "top 85%"
+                    }
+                });
+    
+                // Icon draw animation on hover
+                document.querySelectorAll('.course-card').forEach(card => {
+                    card.addEventListener('mouseenter', () => {
+                        const paths = card.querySelectorAll('svg path');
+                        paths.forEach(path => {
+                            const length = path.getTotalLength();
+                            gsap.fromTo(path,
+                                {
+                                    strokeDashoffset: length,
+                                    strokeDasharray: length
+                                },
+                                {
+                                    strokeDashoffset: 0,
+                                    duration: 1.5,
+                                    ease: "power4.out"
+                                }
+                            );
+                        });
+                    });
+                });
+            });
+        </script>
+
+       <!-- more specs -->
+
+       <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why DigiStar is the Best</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        .achievement-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.96) 0%, rgba(248,250,252,0.96) 100%);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(245, 158, 11, 0.12);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            perspective: 1000px;
+        }
+        
+        .achievement-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 25px 50px -12px rgba(245, 158, 11, 0.15);
+            border-color: rgba(245, 158, 11, 0.25);
+        }
+        
+        .stat-number {
+            font-size: 2.75rem;
+            background: linear-gradient(45deg, #f59e0b, #fcd34d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 10px rgba(245, 158, 11, 0.15);
+        }
+        
+        .icon-wrapper {
+            width: 80px;
+            height: 80px;
+            background: rgba(245, 158, 11, 0.08);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s ease;
+        }
+        
+        .achievement-card:hover .icon-wrapper {
+            background: rgba(245, 158, 11, 0.15);
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .icon-wrapper svg path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            transition: stroke-dashoffset 1.5s ease;
+        }
+        
+        .achievement-card:hover .icon-wrapper svg path {
+            stroke-dashoffset: 0;
+        }
+        
+        .pulse-dot {
+            width: 12px;
+            height: 12px;
+            background: rgba(245, 158, 11, 0.6);
+            border-radius: 50%;
+            position: absolute;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 1; }
+            70% { transform: scale(1.5); opacity: 0; }
+            100% { transform: scale(0.95); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Why DigiStar Section -->
+    <section class="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <!-- Background elements -->
+        <div class="absolute top-0 left-0 w-full h-full opacity-5">
+            <div class="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-amber-400 filter blur-3xl"></div>
+            <div class="absolute bottom-1/3 right-1/4 w-40 h-40 rounded-full bg-amber-500 filter blur-3xl"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto relative">
+            <!-- Section Header -->
+            <div class="text-center mb-20 opacity-0" id="whyHeader">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                    Why DigiStar is the Best Institute for Digital Marketing Training
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Proven results that set us apart in the digital education landscape
+                </p>
+            </div>
+
+            <!-- Achievements Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 10+ Years -->
+                <div class="achievement-card p-8 rounded-2xl shadow-sm opacity-0" id="achievement1">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <div class="stat-number font-bold mb-2" id="yearsCount">0</div>
+                            <h3 class="text-xl font-semibold text-gray-800">Years of Excellence</h3>
+                        </div>
+                        <div class="icon-wrapper relative">
+                            <div class="pulse-dot top-0 right-0"></div>
+                            <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M32 58C46.3594 58 58 46.3594 58 32C58 17.6406 46.3594 6 32 6C17.6406 6 6 17.6406 6 32C6 46.3594 17.6406 58 32 58Z" 
+                                      stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M32 16V32L42 38" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 22L16 16" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M42 22L48 16" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">
+                        Over a decade of shaping digital marketing careers with industry-relevant curriculum
+                    </p>
+                </div>
+
+                <!-- 75,000+ Trainees -->
+                <div class="achievement-card p-8 rounded-2xl shadow-sm opacity-0" id="achievement2">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <div class="stat-number font-bold mb-2" id="traineesCount">0</div>
+                            <h3 class="text-xl font-semibold text-gray-800">Trained Professionals</h3>
+                        </div>
+                        <div class="icon-wrapper relative">
+                            <div class="pulse-dot top-0 right-0"></div>
+                            <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M42 42C46.4183 42 50 38.4183 50 34C50 29.5817 46.4183 26 42 26" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 42C17.5817 42 14 38.4183 14 34C14 29.5817 17.5817 26 22 26" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M32 18C36.4183 18 40 14.4183 40 10C40 5.58172 36.4183 2 32 2C27.5817 2 24 5.58172 24 10C24 14.4183 27.5817 18 32 18Z" 
+                                      stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 42V52C22 54.2091 23.7909 56 26 56H38C40.2091 56 42 54.2091 42 52V42" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M42 26V22C42 19.7909 40.2091 18 38 18H26C23.7909 18 22 19.7909 22 22V26" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">
+                        Join our community of successful digital marketers transforming industries
+                    </p>
+                </div>
+
+                <!-- 2,500+ Batches -->
+                <div class="achievement-card p-8 rounded-2xl shadow-sm opacity-0" id="achievement3">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <div class="stat-number font-bold mb-2" id="batchesCount">0</div>
+                            <h3 class="text-xl font-semibold text-gray-800">Completed Batches</h3>
+                        </div>
+                        <div class="icon-wrapper relative">
+                            <div class="pulse-dot top-0 right-0"></div>
+                            <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10 22L32 10L54 22V42L32 54L10 42V22Z" 
+                                      stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M10 22L32 34L54 22" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M32 34V54" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 42V22L10 22" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M42 42V22L54 22" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M18 16L32 8L46 16" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M32 8V34" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">
+                        Consistently delivering quality education through structured training programs
+                    </p>
+                </div>
+
+                <!-- 57,000+ Placed -->
+                <div class="achievement-card p-8 rounded-2xl shadow-sm opacity-0" id="achievement4">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <div class="stat-number font-bold mb-2" id="placedCount">0</div>
+                            <h3 class="text-xl font-semibold text-gray-800">Career Placements</h3>
+                        </div>
+                        <div class="icon-wrapper relative">
+                            <div class="pulse-dot top-0 right-0"></div>
+                            <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M32 48L24 52L26 43L20 36L29 34L32 26L35 34L44 36L38 43L40 52L32 48Z" 
+                                      stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M32 26V18" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M32 18C36.4183 18 40 14.4183 40 10C40 5.58172 36.4183 2 32 2C27.5817 2 24 5.58172 24 10C24 14.4183 27.5817 18 32 18Z" 
+                                      stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">
+                        Successful career transitions with top companies in the digital space
+                    </p>
+                </div>
+
+                <!-- 1,200+ Hiring Partners -->
+                <div class="achievement-card p-8 rounded-2xl shadow-sm opacity-0" id="achievement5">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <div class="stat-number font-bold mb-2" id="partnersCount">0</div>
+                            <h3 class="text-xl font-semibold text-gray-800">Hiring Partners</h3>
+                        </div>
+                        <div class="icon-wrapper relative">
+                            <div class="pulse-dot top-0 right-0"></div>
+                            <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M32 58C46.3594 58 58 46.3594 58 32C58 17.6406 46.3594 6 32 6C17.6406 6 6 17.6406 6 32C6 46.3594 17.6406 58 32 58Z" 
+                                      stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 22L42 42" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M42 22L22 42" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M32 22V42" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 32H42" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">
+                        Strong network of companies actively recruiting our certified professionals
+                    </p>
+                </div>
+
+                <!-- 40+ Training Centers -->
+                <div class="achievement-card p-8 rounded-2xl shadow-sm opacity-0" id="achievement6">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <div class="stat-number font-bold mb-2" id="centersCount">0</div>
+                            <h3 class="text-xl font-semibold text-gray-800">Training Centers</h3>
+                        </div>
+                        <div class="icon-wrapper relative">
+                            <div class="pulse-dot top-0 right-0"></div>
+                            <svg width="36" height="36" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M54 18H10V46H54V18Z" 
+                                      stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M18 18V10H46V18" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M10 26H54" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M32 26V46" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 34H26" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M38 34H42" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 42H26" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M38 42H42" stroke="#4B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">
+                        Nationwide presence with state-of-the-art learning facilities
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Header animation
+            gsap.to("#whyHeader", {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: "power4.out",
+                scrollTrigger: {
+                    trigger: "#whyHeader",
+                    start: "top 80%"
+                }
+            });
+
+            // Achievements animation
+            gsap.utils.toArray(".achievement-card").forEach((card, i) => {
+                gsap.to(card, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    delay: i * 0.15,
+                    ease: "power4.out",
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top 85%"
+                    }
+                });
+            });
+
+            // Number counting animations
+            const stats = [
+                { id: "yearsCount", value: 10, suffix: "+" },
+                { id: "traineesCount", value: 75, suffix: "K+" },
+                { id: "batchesCount", value: 2500, suffix: "+" },
+                { id: "placedCount", value: 57, suffix: "K+" },
+                { id: "partnersCount", value: 1200, suffix: "+" },
+                { id: "centersCount", value: 40, suffix: "+" }
+            ];
+
+            stats.forEach(stat => {
+                gsap.to(`#${stat.id}`, {
+                    innerText: stat.value,
+                    duration: 2,
+                    snap: { innerText: 1 },
+                    ease: "power4.out",
+                    scrollTrigger: {
+                        trigger: `#${stat.id}`,
+                        start: "top 85%"
+                    },
+                    onUpdate: function() {
+                        document.getElementById(stat.id).innerText = 
+                            Math.floor(this.targets()[0].innerText) + stat.suffix;
+                    }
+                });
+            });
+
+            // Icon draw animation on hover
+            document.querySelectorAll('.achievement-card').forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    const paths = card.querySelectorAll('svg path');
+                    paths.forEach(path => {
+                        const length = path.getTotalLength();
+                        gsap.fromTo(path,
+                            {
+                                strokeDashoffset: length,
+                                strokeDasharray: length
+                            },
+                            {
+                                strokeDashoffset: 0,
+                                duration: 1.5,
+                                ease: "power4.out"
+                            }
+                        );
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
+</body>
+</html>
+
+
+
